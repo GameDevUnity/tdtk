@@ -14,7 +14,7 @@ class CameraInfo extends MonoBehaviour {
 	// render path
 	public var currentRenderPath : RenderingPath;
 	// number of official image fx used
-	public var recognizedPostFxCount : int = 0;
+	public var currentPostFxCount : int = 0;
 	
 #if UNITY_EDITOR	
 	function Start () {
@@ -38,7 +38,7 @@ class CameraInfo extends MonoBehaviour {
 		for (var post : PostEffectsBase in fx) 
 			if (post.enabled)
 				fxCount++;
-		recognizedPostFxCount = fxCount;		
+		currentPostFxCount = fxCount;		
 	}
 #endif
 }

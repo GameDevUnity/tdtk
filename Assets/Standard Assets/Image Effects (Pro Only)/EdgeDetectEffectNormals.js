@@ -22,23 +22,22 @@ class EdgeDetectEffectNormals extends PostEffectsBase {
 	public var edgeDetectShader : Shader;
 	private var edgeDetectMaterial : Material = null;
 
-	function CheckResources () : boolean {	
-		CheckSupport (true);
-	
+	function CreateMaterials () {
 		edgeDetectMaterial = CheckShaderAndCreateMaterial (edgeDetectShader,edgeDetectMaterial);
-		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;				
 	}
 	
-	@ImageEffectOpaque
+	function Start () { 
+		CreateMaterials ();
+		CheckSupport (true);
+	}
+	
+	function OnEnable () {
+		camera.depthTextureMode |= DepthTextureMode.DepthNormals;	
+	}
+	
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}
-				
+		CreateMaterials ();
+		
 		var sensitivity : Vector2 = Vector2 (sensitivityDepth, sensitivityNormals);
 	
 		source.filterMode = FilterMode.Point;

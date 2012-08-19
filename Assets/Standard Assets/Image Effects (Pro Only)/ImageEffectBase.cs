@@ -8,7 +8,7 @@ public class ImageEffectBase : MonoBehaviour {
 	public Shader   shader;
 	private Material m_Material;
 
-	protected virtual void Start ()
+	protected void Start ()
 	{
 		// Disable if we don't support image effects
 		if (!SystemInfo.supportsImageEffects) {
@@ -32,7 +32,7 @@ public class ImageEffectBase : MonoBehaviour {
 		} 
 	}
 	
-	protected virtual void OnDisable() {
+	protected void OnDisable() {
 		if( m_Material ) {
 			DestroyImmediate( m_Material );
 		}

@@ -19,23 +19,23 @@ class Crease extends PostEffectsBase {
 	public var creaseApplyShader : Shader;
 	private var creaseApplyMaterial : Material = null;	
 	
-	function CheckResources () : boolean {	
-		CheckSupport (true);
-		
+	function CreateMaterials () {
 		blurMaterial = CheckShaderAndCreateMaterial (blurShader, blurMaterial);
 		depthFetchMaterial = CheckShaderAndCreateMaterial (depthFetchShader, depthFetchMaterial);
 		creaseApplyMaterial = CheckShaderAndCreateMaterial (creaseApplyShader, creaseApplyMaterial);
-		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;			
 	}
 	
+	function Start () {
+		CreateMaterials ();
+		CheckSupport (true);
+	}
+	
+	function OnEnable() {
+		camera.depthTextureMode |= DepthTextureMode.Depth;	
+	}
+
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}
+		CreateMaterials ();
 		
 		var widthOverHeight : float = (1.0f * source.width) / (1.0f * source.height);
 		var oneOverBaseSize : float = 1.0f / 512.0f;		

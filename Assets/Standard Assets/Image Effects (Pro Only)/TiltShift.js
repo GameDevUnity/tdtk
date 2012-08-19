@@ -27,22 +27,22 @@ class TiltShift extends PostEffectsBase {
 	private var end01 : float = 1.0f;
 	private var curve : float = 1.0f;
 		
-	function CheckResources () : boolean {	
-		CheckSupport (true);	
-	
+	function CreateMaterials () {
 		tiltShiftMaterial = CheckShaderAndCreateMaterial (tiltShiftShader, tiltShiftMaterial);
-		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;				
 	}
 	
+	function Start () {
+		CreateMaterials ();
+		CheckSupport (true);
+	}
+	
+	function OnEnable() {
+		camera.depthTextureMode |= DepthTextureMode.Depth;	
+	}
+
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}
-				
+		CreateMaterials ();
+		
 		var widthOverHeight : float = (1.0f * source.width) / (1.0f * source.height);
 		var oneOverBaseSize : float = 1.0f / 512.0f;		
 

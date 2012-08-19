@@ -22,25 +22,22 @@ class Vignetting extends PostEffectsBase {
 	
 	public var chromAberrationShader : Shader;
 	private var chromAberrationMaterial : Material;
+
+
+	function Start () {
+		CreateMaterials (); 
+		CheckSupport (false);
+	}
 	
-	function CheckResources () : boolean {	
-		CheckSupport (false);	
-	
+	function CreateMaterials () {			
 		vignetteMaterial = CheckShaderAndCreateMaterial (vignetteShader, vignetteMaterial);
 		separableBlurMaterial = CheckShaderAndCreateMaterial (separableBlurShader, separableBlurMaterial);
 		chromAberrationMaterial = CheckShaderAndCreateMaterial (chromAberrationShader, chromAberrationMaterial);
-		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;		
 	}
 	
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}	
-				
+		CreateMaterials ();	
+		
 		var widthOverHeight : float = (1.0f * source.width) / (1.0f * source.height);
 		var oneOverBaseSize : float = 1.0f / 512.0f;				
 		

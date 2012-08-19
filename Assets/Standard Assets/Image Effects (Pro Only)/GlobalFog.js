@@ -9,8 +9,8 @@ class GlobalFog extends PostEffectsBase {
 	
 	enum FogMode {
 		AbsoluteYAndDistance = 0,
-		AbsoluteY = 1,
-		Distance = 2,
+		AbsoluteY = 1,	
+		Distance = 2,	
 		RelativeYAndDistance = 3,
 	}
 	
@@ -31,26 +31,29 @@ class GlobalFog extends PostEffectsBase {
 	public var fogShader : Shader;
 	private var fogMaterial : Material = null;	
 	
-	function CheckResources () : boolean {	
-		CheckSupport (true);
-	
+	function CreateMaterials () {
 		fogMaterial = CheckShaderAndCreateMaterial (fogShader, fogMaterial);
-		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;				
+	}
+	
+	function Start () {
+		CreateMaterials ();
+		CheckSupport (true);
+	}
+	
+	function OnEnable() {
+		camera.depthTextureMode |= DepthTextureMode.Depth;	
 	}
 
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
+		CreateMaterials ();
+	
+		var updateFromCamera : boolean = true;	
+		if (updateFromCamera) {
+			CAMERA_NEAR = camera.nearClipPlane;
+			CAMERA_FAR = camera.farClipPlane;
+			CAMERA_FOV = camera.fieldOfView;
+			CAMERA_ASPECT_RATIO = camera.aspect;
 		}
-			
-		CAMERA_NEAR = camera.nearClipPlane;
-		CAMERA_FAR = camera.farClipPlane;
-		CAMERA_FOV = camera.fieldOfView;
-		CAMERA_ASPECT_RATIO = camera.aspect;
 	
 		var frustumCorners : Matrix4x4 = Matrix4x4.identity;		
 		var vec : Vector4;
@@ -95,31 +98,33 @@ class GlobalFog extends PostEffectsBase {
 		CustomGraphicsBlit (source, destination, fogMaterial, fogMode);
 	}
 	
-	static function CustomGraphicsBlit (source : RenderTexture, dest : RenderTexture, fxMaterial : Material, passNr : int) {
-		RenderTexture.active = dest;
-		       
-		fxMaterial.SetTexture ("_MainTex", source);	        
-	        	        
-		GL.PushMatrix ();
-		GL.LoadOrtho ();	
-	    	
-		fxMaterial.SetPass (passNr);	
-		
-	    GL.Begin (GL.QUADS);
-							
-		GL.MultiTexCoord2 (0, 0.0f, 0.0f); 
-		GL.Vertex3 (0.0f, 0.0f, 3.0f); // BL
-		
-		GL.MultiTexCoord2 (0, 1.0f, 0.0f); 
-		GL.Vertex3 (1.0f, 0.0f, 2.0f); // BR
-		
-		GL.MultiTexCoord2 (0, 1.0f, 1.0f); 
-		GL.Vertex3 (1.0f, 1.0f, 1.0f); // TR
-		
-		GL.MultiTexCoord2 (0, 0.0f, 1.0f); 
-		GL.Vertex3 (0.0f, 1.0f, 0.0); // TL
-		
-		GL.End ();
-	    GL.PopMatrix ();
-	}		
+static function CustomGraphicsBlit (source : RenderTexture, dest : RenderTexture, fxMaterial : Material, passNr : int) {
+	RenderTexture.active = dest;
+	       
+	fxMaterial.SetTexture ("_MainTex", source);	        
+        
+	// var invertY : boolean = source.texelSize.y < 0.0f;
+        
+	GL.PushMatrix ();
+	GL.LoadOrtho ();	
+    	
+	fxMaterial.SetPass (passNr);	
+	
+    GL.Begin (GL.QUADS);
+						
+	GL.MultiTexCoord2 (0, 0.0f, 0.0f); 
+	GL.Vertex3 (0.0f, 0.0f, 3.0f); // BL
+	
+	GL.MultiTexCoord2 (0, 1.0f, 0.0f); 
+	GL.Vertex3 (1.0f, 0.0f, 2.0f); // BR
+	
+	GL.MultiTexCoord2 (0, 1.0f, 1.0f); 
+	GL.Vertex3 (1.0f, 1.0f, 1.0f); // TR
+	
+	GL.MultiTexCoord2 (0, 0.0f, 1.0f); 
+	GL.Vertex3 (0.0f, 1.0f, 0.0); // TL
+	
+	GL.End ();
+    GL.PopMatrix ();
+}		
 }

@@ -10,7 +10,6 @@ class BloomAndLensFlaresEditor extends Editor
 	
 	var serObj : SerializedObject;
 	
-	var hdr  : SerializedProperty;
 	var sepBlurSpread : SerializedProperty;
 	var useSrcAlphaAsMask : SerializedProperty;
 
@@ -32,13 +31,11 @@ class BloomAndLensFlaresEditor extends Editor
 	var flareColorD : SerializedProperty;	
 	
 	var blurWidth : SerializedProperty;
-	var lensFlareVignetteMask : SerializedProperty;
 
 	function OnEnable () {
 		serObj = new SerializedObject (target);
 				
 		screenBlendMode = serObj.FindProperty("screenBlendMode");
-		hdr = serObj.FindProperty("hdr");
 		
 		sepBlurSpread = serObj.FindProperty("sepBlurSpread");
 		useSrcAlphaAsMask = serObj.FindProperty("useSrcAlphaAsMask");
@@ -58,8 +55,8 @@ class BloomAndLensFlaresEditor extends Editor
 		flareColorB = serObj.FindProperty("flareColorB");
 		flareColorC = serObj.FindProperty("flareColorC");
 		flareColorD = serObj.FindProperty("flareColorD");		
+		
 		blurWidth = serObj.FindProperty("blurWidth");
-		lensFlareVignetteMask = serObj.FindProperty("lensFlareVignetteMask");
 		
 		tweakMode = serObj.FindProperty("tweakMode");
 	}
@@ -67,88 +64,80 @@ class BloomAndLensFlaresEditor extends Editor
     function OnInspectorGUI () {        
 		serObj.Update();
 
-		GUILayout.Label("HDR " + (hdr.enumValueIndex == 0 ? "auto detected, " : (hdr.enumValueIndex == 1 ? "forced on, " : "disabled, ")) + (useSrcAlphaAsMask.floatValue < 0.1f ? " ignoring alpha channel glow information" : " using alpha channel glow information"), EditorStyles.miniBoldLabel);		
+		GUILayout.Label((useSrcAlphaAsMask.floatValue < 0.1f ? "Current settings ignore color buffer alpha" : "Current settings use color buffer alpha as a glow mask"), EditorStyles.miniBoldLabel);
 		
-		EditorGUILayout.PropertyField (tweakMode, new GUIContent("Tweak mode"));	
-    	EditorGUILayout.PropertyField (screenBlendMode, new GUIContent("Blend mode"));    	
-		EditorGUILayout.PropertyField (hdr, new GUIContent("HDR"));
-		
-		// display info text when screen blend mode cannot be used
-		var cam : Camera = (target as BloomAndLensFlares).camera;
-		if(cam != null) {
-			if(screenBlendMode.enumValueIndex==0 && ((cam.hdr && hdr.enumValueIndex==0) || (hdr.enumValueIndex==1))) {
-				EditorGUILayout.HelpBox("Screen blend is not supported in HDR. Using 'Add' instead.", MessageType.Info);
-			}
-		}		
-		
-		if (1 == tweakMode.intValue) 
-    		EditorGUILayout.PropertyField (lensflares, new GUIContent("Cast lens flares"));
-
+		EditorGUILayout.PropertyField (tweakMode, new GUIContent("Mode"));	
+    	EditorGUILayout.PropertyField (screenBlendMode, new GUIContent("Blend mode"));
     	EditorGUILayout.Separator ();
 
+    	// some genral tweak needs
     	EditorGUILayout.PropertyField (bloomIntensity, new GUIContent("Intensity"));	
-    	bloomThreshhold.floatValue = EditorGUILayout.Slider ("Threshhold", bloomThreshhold.floatValue, -0.05, 4.0);
-    	bloomBlurIterations.intValue = EditorGUILayout.IntSlider ("Blur iterations", bloomBlurIterations.intValue, 1, 4);
+    	bloomThreshhold.floatValue = EditorGUILayout.Slider ("Threshhold", bloomThreshhold.floatValue, -0.05, 1.0);
+    	
+    	if (1 == tweakMode.intValue)
+    		bloomBlurIterations.intValue = EditorGUILayout.IntSlider ("Blur iterations", bloomBlurIterations.intValue, 1, 4);
+    	else
+    		bloomBlurIterations.intValue = 1;
 		sepBlurSpread.floatValue = EditorGUILayout.Slider ("Blur spread", sepBlurSpread.floatValue, 0.1, 10.0);
     	
     	if (1 == tweakMode.intValue)
-    		useSrcAlphaAsMask.floatValue = EditorGUILayout.Slider (new  GUIContent("Use alpha mask", "Make alpha channel define glowiness"), useSrcAlphaAsMask.floatValue, 0.0, 1.0);
+    		useSrcAlphaAsMask.floatValue = EditorGUILayout.Slider (new  GUIContent("Use alpha mask","How much should the image alpha values (deifned by all materials, colors and textures alpha values define the bright (blooming/glowing) areas of the image"), useSrcAlphaAsMask.floatValue, 0.0, 1.0);
     	else
     		useSrcAlphaAsMask.floatValue = 0.0;
     	    	
     	if (1 == tweakMode.intValue) {
     		EditorGUILayout.Separator ();
 	    
+	    	EditorGUILayout.PropertyField (lensflares, new GUIContent("Cast lens flares"));
 	    	if (lensflares.boolValue) {
-	    			    		
 	    		// further lens flare tweakings
 	    		if (0 != tweakMode.intValue)
-	    			EditorGUILayout.PropertyField (lensflareMode, new GUIContent("Lens flare mode"));
+	    			EditorGUILayout.PropertyField (lensflareMode, new GUIContent(" Mode"));
 	    		else
 	    			lensflareMode.enumValueIndex = 0;	    		
 	    		
-	    		EditorGUILayout.PropertyField(lensFlareVignetteMask, new GUIContent("Lens flare mask", "This mask is needed to prevent lens flare artifacts"));	    		
-	    		
 	    		EditorGUILayout.PropertyField (lensflareIntensity, new GUIContent("Local intensity"));
 	    		lensflareThreshhold.floatValue = EditorGUILayout.Slider ("Local threshhold", lensflareThreshhold.floatValue, 0.0, 1.0);
-	    			    		
+	    		
+	    		EditorGUILayout.Separator ();
+	    		
 	    		if (lensflareMode.intValue == 0) {
 	    			// ghosting	
 	    			EditorGUILayout.BeginHorizontal ();
-	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent("1st Color"));
-	    			EditorGUILayout.PropertyField (flareColorB, new GUIContent("2nd Color"));
+	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent(" 1st Color"));
+	    			EditorGUILayout.PropertyField (flareColorB, new GUIContent(" 2nd Color"));
 	   				EditorGUILayout.EndHorizontal ();
 	   				
 	     			EditorGUILayout.BeginHorizontal ();
-	    			EditorGUILayout.PropertyField (flareColorC, new GUIContent("3rd Color"));
-	    			EditorGUILayout.PropertyField (flareColorD, new GUIContent("4th Color"));
+	    			EditorGUILayout.PropertyField (flareColorC, new GUIContent(" 3rd Color"));
+	    			EditorGUILayout.PropertyField (flareColorD, new GUIContent(" 4th Color"));
 	   				EditorGUILayout.EndHorizontal ();	
 	    		} 
 	    		else if (lensflareMode.intValue == 1) {
 	    			// hollywood
-	    			EditorGUILayout.PropertyField (hollyStretchWidth, new GUIContent("Stretch width"));
-	    			hollywoodFlareBlurIterations.intValue = EditorGUILayout.IntSlider ("Blur iterations", hollywoodFlareBlurIterations.intValue, 1, 4);
+	    			EditorGUILayout.PropertyField (hollyStretchWidth, new GUIContent(" Stretch width"));
+	    			hollywoodFlareBlurIterations.intValue = EditorGUILayout.IntSlider (" Blur iterations", hollywoodFlareBlurIterations.intValue, 1, 4);
 	    			    			
-	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent("Tint Color"));	
+	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent(" Tint Color"));	
 	    		} 
 	    		else if (lensflareMode.intValue == 2) {
 	    			// both
-	    			EditorGUILayout.PropertyField (hollyStretchWidth, new GUIContent("Stretch width"));
-	    			hollywoodFlareBlurIterations.intValue = EditorGUILayout.IntSlider ("Blur iterations", hollywoodFlareBlurIterations.intValue, 1, 4);
+	    			EditorGUILayout.PropertyField (hollyStretchWidth, new GUIContent(" Stretch width"));
+	    			hollywoodFlareBlurIterations.intValue = EditorGUILayout.IntSlider (" Blur iterations", hollywoodFlareBlurIterations.intValue, 1, 4);
 	    			    			
 	    			EditorGUILayout.BeginHorizontal ();
-	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent("1st Color"));
-	    			EditorGUILayout.PropertyField (flareColorB, new GUIContent("2nd Color"));
+	    			EditorGUILayout.PropertyField (flareColorA, new GUIContent(" 1st Color"));
+	    			EditorGUILayout.PropertyField (flareColorB, new GUIContent(" 2nd Color"));
 	   				EditorGUILayout.EndHorizontal ();
 	   				
 	     			EditorGUILayout.BeginHorizontal ();
-	    			EditorGUILayout.PropertyField (flareColorC, new GUIContent("3rd Color"));
-	    			EditorGUILayout.PropertyField (flareColorD, new GUIContent("4th Color"));
+	    			EditorGUILayout.PropertyField (flareColorC, new GUIContent(" 3rd Color"));
+	    			EditorGUILayout.PropertyField (flareColorD, new GUIContent(" 4th Color"));
 	   				EditorGUILayout.EndHorizontal ();  			
 				} 		
 	    	}
     	} else
-    		lensflares.boolValue = false; // disable lens flares in simple tweak mode
+    		lensflares.boolValue = false;    	
     	
     	serObj.ApplyModifiedProperties();
     }

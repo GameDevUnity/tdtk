@@ -37,23 +37,23 @@ class SunShafts extends PostEffectsBase
 	public var simpleClearShader : Shader;
 	private var simpleClearMaterial : Material;
 		
-	function CheckResources () : boolean {	
-		CheckSupport (useDepthTexture);
-		
+	function CreateMaterials () {			
 		sunShaftsMaterial = CheckShaderAndCreateMaterial (sunShaftsShader, sunShaftsMaterial);
 		simpleClearMaterial = CheckShaderAndCreateMaterial (simpleClearShader, simpleClearMaterial);
+	}
+	
+	function Start () {		
+		CreateMaterials ();	
+		CheckSupport (useDepthTexture);
 		
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;				
+		if(useDepthTexture) { 
+			camera.depthTextureMode |= DepthTextureMode.Depth;	
+		}
 	}
 	
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {	
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}
-				
+		CreateMaterials ();	
+		
 		// we actually need to check this every frame
 		if(useDepthTexture)
 			camera.depthTextureMode |= DepthTextureMode.Depth;	

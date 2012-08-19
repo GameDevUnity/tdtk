@@ -157,7 +157,7 @@
 	half4 fragDofApplyBg (v2fDofApply i) : COLOR {		
 		half4 tapHigh = tex2D (_MainTex, i.uv.xy);
 		
-		#if SHADER_API_D3D9 || SHADER_API_D3D11 || SHADER_API_XBOX360
+		#if SHADER_API_D3D9
 		if (_MainTex_TexelSize.y < 0)
 			i.uv.xy = i.uv.xy * half2(1,-1)+half2(0,1);
 		#endif
@@ -185,7 +185,7 @@
 	half4 fragDofApplyFg (v2fDofApply i) : COLOR {
 		half4 fgBlur = tex2D(_TapLowForeground, i.uv.xy);	
 		
-		#if SHADER_API_D3D9 || SHADER_API_D3D11 || SHADER_API_XBOX360
+		#if SHADER_API_D3D9
 		if (_MainTex_TexelSize.y < 0)
 			i.uv.xy = i.uv.xy * half2(1,-1)+half2(0,1);
 		#endif
@@ -217,7 +217,7 @@
 		
 	half4 fragCocBg (v2f i) : COLOR {
 		
-		float d = UNITY_SAMPLE_DEPTH ( tex2D (_CameraDepthTexture, i.uv1.xy) );
+		float d = tex2D (_CameraDepthTexture, i.uv1.xy).x;
 		d = Linear01Depth (d);
 		half coc = 0.0; 
 		
@@ -234,12 +234,12 @@
 		half4 color = tex2D (_MainTex, i.uv1.xy);
 		color.a = 0.0;
 
-		#if SHADER_API_D3D9 || SHADER_API_D3D11 || SHADER_API_XBOX360
+		#if SHADER_API_D3D9
 		if (_MainTex_TexelSize.y < 0)
 			i.uv1.xy = i.uv1.xy * half2(1,-1)+half2(0,1);
 		#endif
 
-		float d = UNITY_SAMPLE_DEPTH (tex2D (_CameraDepthTexture, i.uv1.xy) );
+		float d = tex2D (_CameraDepthTexture, i.uv1.xy);
 		d = Linear01Depth (d);	
 		
 		half focalDistance01 = (_CurveParams.w - _CurveParams.z);	
@@ -259,7 +259,7 @@
 	
 	// used for simple one one blend
 	
-	half4 fragAddBokeh (v2f i) : COLOR {	
+	half4 fragAdd (v2f i) : COLOR {	
 		half4 from = tex2D( _MainTex, i.uv1.xy );
 		return from;
 	}
@@ -327,7 +327,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertDofApply
       #pragma fragment fragDofApplyBg
@@ -343,7 +342,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertDofApply
       #pragma fragment fragDofApplyFgDebug
@@ -359,7 +357,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertDofApply
       #pragma fragment fragDofApplyBgDebug
@@ -377,7 +374,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vert
       #pragma fragment fragCocBg
@@ -396,7 +392,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertDofApply
       #pragma fragment fragDofApplyFg
@@ -412,7 +407,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vert
       #pragma fragment fragCocFg
@@ -427,7 +421,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertDownsampleWithCocConserve
       #pragma fragment fragDownsampleWithCocConserve
@@ -444,7 +437,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vert
       #pragma fragment fragMask
@@ -456,15 +448,14 @@ Subshader {
  
  Pass {
 	  ZTest Always Cull Off ZWrite Off
-	  Blend SrcAlpha OneMinusSrcAlpha
+	  Blend One One
 	  ColorMask RGB
   	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vert
-      #pragma fragment fragAddBokeh
+      #pragma fragment fragAdd
 
       ENDCG
   	} 
@@ -478,7 +469,6 @@ Subshader {
 	  Fog { Mode off }       
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertWithRadius
       #pragma fragment fragExtractAndAddToBokeh
@@ -493,7 +483,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertWithRadius
       #pragma fragment fragDarkenForBokeh
@@ -508,7 +497,6 @@ Subshader {
 	  Fog { Mode off }      
 
       CGPROGRAM
-      #pragma exclude_renderers flash
       #pragma fragmentoption ARB_precision_hint_fastest
       #pragma vertex vertWithRadius
       #pragma fragment fragExtractAndAddToBokeh

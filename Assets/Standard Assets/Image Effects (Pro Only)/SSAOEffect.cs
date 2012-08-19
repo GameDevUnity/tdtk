@@ -84,7 +84,6 @@ public class SSAOEffect : MonoBehaviour
 		}
 	}
 	
-	[ImageEffectOpaque]
 	void OnRenderImage (RenderTexture source, RenderTexture destination)
 	{
 		if (!m_Supported || !m_SSAOShader.isSupported) {

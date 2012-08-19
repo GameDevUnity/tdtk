@@ -100,6 +100,7 @@ class DepthOfField34Editor extends Editor
    		EditorGUILayout.Separator ();
 
     	GUILayout.Label ("Focal Settings", EditorStyles.boldLabel);    	
+		GUILayout.Label ("Fixed z-distance or follow an in-game transform", EditorStyles.miniBoldLabel);
     	
     	if (simpleTweakMode.boolValue) {
    			focalPoint.floatValue = EditorGUILayout.Slider ("Focal distance", focalPoint.floatValue, go.camera.nearClipPlane, go.camera.farClipPlane);
@@ -117,7 +118,8 @@ class DepthOfField34Editor extends Editor
     	    	
    		EditorGUILayout.Separator ();
    		
-   		GUILayout.Label ("Blur (Fore- and Background)", EditorStyles.boldLabel);  
+   		GUILayout.Label ("Blur", EditorStyles.boldLabel);  
+   		GUILayout.Label ("Foreground and background defocus", EditorStyles.miniBoldLabel);
 		EditorGUILayout.PropertyField (bluriness, new GUIContent("Blurriness"));
    		EditorGUILayout.PropertyField (maxBlurSpread, new GUIContent("Blur spread"));
 						
@@ -135,7 +137,7 @@ class DepthOfField34Editor extends Editor
     		bokehThreshholdLuminance.floatValue = EditorGUILayout.Slider ("Min luminance", bokehThreshholdLuminance.floatValue, 0.0f, 0.99f);  
     		bokehThreshholdContrast.floatValue = EditorGUILayout.Slider ("Min contrast", bokehThreshholdContrast.floatValue, 0.0f, 0.25f);  
     		bokehDownsample.intValue = EditorGUILayout.IntSlider ("Downsample", bokehDownsample.intValue, 1, 3);  
-    		bokehScale.floatValue = EditorGUILayout.Slider ("Size scale", bokehScale.floatValue, 0.0f, 20.0f);     	
+    		bokehScale.floatValue = EditorGUILayout.Slider ("Size scale", bokehScale.floatValue, 0.0f, 10.0f);     	
     		EditorGUILayout.PropertyField (bokehTexture , new GUIContent("Texture mask"));	
     	}		
     	    	

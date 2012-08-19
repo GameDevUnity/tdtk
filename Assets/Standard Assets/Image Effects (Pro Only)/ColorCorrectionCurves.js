@@ -45,25 +45,25 @@ class ColorCorrectionCurves extends PostEffectsBase
 	private var updateTexturesOnStartup : boolean = true;
 		
 	function Start () {
-		super ();
+		CheckSupport (true);
 		updateTexturesOnStartup = true;
 	}
 	
-	function Awake () {	}
+	function Awake () {
+		
+	}
 	
-	function CheckResources () : boolean {		
-		CheckSupport (mode == ColorCorrectionMode.Advanced);
-	
+	function CreateMaterials () {
 		ccMaterial = CheckShaderAndCreateMaterial (simpleColorCorrectionCurvesShader, ccMaterial);
 		ccDepthMaterial = CheckShaderAndCreateMaterial (colorCorrectionCurvesShader, ccDepthMaterial);
 		selectiveCcMaterial = CheckShaderAndCreateMaterial (colorCorrectionSelectiveShader, selectiveCcMaterial);
 		
 		if (!rgbChannelTex)
-			 rgbChannelTex = new Texture2D (256, 4, TextureFormat.ARGB32, false, true); 
+			 rgbChannelTex = new Texture2D (256, 4, TextureFormat.ARGB32, false);
 		if (!rgbDepthChannelTex)
-			 rgbDepthChannelTex = new Texture2D (256, 4, TextureFormat.ARGB32, false, true);
+			 rgbDepthChannelTex = new Texture2D (256, 4, TextureFormat.ARGB32, false);
 		if (!zCurveTex)
-			 zCurveTex = new Texture2D (256, 1, TextureFormat.ARGB32, false, true);
+			 zCurveTex = new Texture2D (256, 1, TextureFormat.ARGB32, false);
 			 
 		rgbChannelTex.hideFlags = HideFlags.DontSave;
 		rgbDepthChannelTex.hideFlags = HideFlags.DontSave;
@@ -71,12 +71,13 @@ class ColorCorrectionCurves extends PostEffectsBase
 			
 		rgbChannelTex.wrapMode = TextureWrapMode.Clamp;
 		rgbDepthChannelTex.wrapMode = TextureWrapMode.Clamp;
-		zCurveTex.wrapMode = TextureWrapMode.Clamp;	
-					
-		if(!isSupported)
-			ReportAutoDisable ();
-		return isSupported;		  
-	}	
+		zCurveTex.wrapMode = TextureWrapMode.Clamp;				
+	}
+	
+	function OnEnable () {
+		if(useDepthCorrection)
+			camera.depthTextureMode |= DepthTextureMode.Depth;	
+	}
 	
 	public function UpdateParameters () 
 	{			
@@ -114,10 +115,7 @@ class ColorCorrectionCurves extends PostEffectsBase
 	}
 	
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {
-		if(CheckResources()==false) {
-			Graphics.Blit (source, destination);
-			return;
-		}
+		CreateMaterials ();
 		
 		if (updateTexturesOnStartup) {
 			UpdateParameters ();
