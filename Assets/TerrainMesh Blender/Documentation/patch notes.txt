@@ -1,0 +1,6 @@
+Terrain-Mesh Blend editor extension for Unity 3D
+
+
+Version 1.1
+--------------------------
+- Fixed a bug causing Single and Regular variants of the shader to produce odd colors in certain situations while using forward mode on some graphics card.

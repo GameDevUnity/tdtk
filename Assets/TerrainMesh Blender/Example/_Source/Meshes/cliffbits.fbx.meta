@@ -1,0 +1,123 @@
+fileFormatVersion: 2
+guid: c96b4bbfc372ffc49abedc483e10b507
+ModelImporter:
+  fileIDToRecycleName:
+    100000: cliffbit04
+    100002: cliffbit03
+    100004: cliffbit01
+    100006: //RootNode
+    100008: cliffbit02
+    400000: cliffbit04
+    400002: cliffbit03
+    400004: cliffbit01
+    400006: //RootNode
+    400008: cliffbit02
+    2300000: cliffbit04
+    2300002: cliffbit03
+    2300004: cliffbit01
+    2300006: cliffbit02
+    3300000: cliffbit04
+    3300002: cliffbit03
+    3300004: cliffbit01
+    3300006: cliffbit02
+    4300000: cliffbit04
+    4300002: cliffbit01
+    4300004: cliffbit02
+    4300006: cliffbit03
+    11100000: //RootNode
+  serializedVersion: 10
+  materials:
+    importMaterials: 0
+    materialName: 1
+    materialSearch: 1
+  animations:
+    generateAnimations: 3
+    bakeSimulation: 0
+    splitAnimations: 1
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 1
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMesh: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  textMetaNamesToFileIDs:
+    //RootNode:
+      data:
+        first: 1
+        second: a6860100
+      data:
+        first: 4
+        second: 861a0600
+      data:
+        first: 111
+        second: 605fa900
+    cliffbit01:
+      data:
+        first: 1
+        second: ae860100
+      data:
+        first: 4
+        second: 8e1a0600
+      data:
+        first: 23
+        second: 6c182300
+      data:
+        first: 33
+        second: ac5a3200
+    cliffbit02:
+      data:
+        first: 1
+        second: b0860100
+      data:
+        first: 4
+        second: 901a0600
+      data:
+        first: 23
+        second: 6e182300
+      data:
+        first: 33
+        second: ae5a3200
+    cliffbit03:
+      data:
+        first: 1
+        second: ac860100
+      data:
+        first: 4
+        second: 8c1a0600
+      data:
+        first: 23
+        second: 6a182300
+      data:
+        first: 33
+        second: aa5a3200
+    cliffbit04:
+      data:
+        first: 1
+        second: aa860100
+      data:
+        first: 4
+        second: 8a1a0600
+      data:
+        first: 23
+        second: 68182300
+      data:
+        first: 33
+        second: a85a3200
