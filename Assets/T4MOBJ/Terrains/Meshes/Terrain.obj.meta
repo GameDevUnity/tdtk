@@ -4,6 +4,7 @@ ModelImporter:
   fileIDToRecycleName:
     4300000: default_MeshPart0
     4300002: default_MeshPart1
+    4300004: default
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -22,7 +23,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 2
+    meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
     generateSecondaryUV: 0

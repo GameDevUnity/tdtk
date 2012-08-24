@@ -1,0 +1,37 @@
+fileFormatVersion: 2
+guid: d45839c6b1effdb45a869b5d48992680
+SubstanceImporter:
+  serializedVersion: 2
+  materialInstances:
+  - name: nature_001
+    prototypeName: nature_001
+    shaderName: 
+    inputs: []
+    materialInformation:
+      offset: {x: 0, y: 0}
+      scale: {x: 1, y: 1}
+      generatedAtLoading: 1
+      generateAllOutputs: 0
+      animationUpdateRate: 0
+    materialProperties:
+      serializedVersion: 2
+      texEnvs: {}
+      floats: {}
+      colors: {}
+    textureParameters:
+    - name: nature_001_Diffuse
+      alphaSource: 5
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
+    - name: nature_001_Normal
+      alphaSource: 0
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
+    buildTargetSettings:
+    - serializedVersion: 2
+      buildTarget: 
+      textureWidth: 512
+      textureHeight: 512
+      textureFormat: 0

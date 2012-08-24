@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <asset>
+        <contributor>
+            <authoring_tool>Lightwave 9.5</authoring_tool>
+        </contributor>
+        <created>2010-03-09T12:07:13Z</created>
+        <modified>2010-03-09T12:07:13Z</modified>
+        <unit meter="1"></unit>
+        <up_axis>Y_UP</up_axis>
+    </asset>
+    <library_animations></library_animations>
+    <library_cameras></library_cameras>
+    <library_lights></library_lights>
+    <library_images>
+        <image id="brunches_02_c" name="brunches_02_c">
+            <init_from>file:///D:/3d/3d-daten/3D/3D-Objekte/Martin_Teichmann/rocks/Meshes/brunches_02_c.tga</init_from>
+        </image>
+    </library_images>
+    <library_materials>
+        <material id="Default" name="Default">
+            <instance_effect url="#Default-fx"></instance_effect>
+        </material>
+        <material id="lambert20SG" name="lambert20SG">
+            <instance_effect url="#lambert20SG-fx"></instance_effect>
+        </material>
+    </library_materials>
+    <library_effects>
+        <effect id="Default-fx">
+            <profile_COMMON>
+                <technique sid="common">
+                    <blinn>
+                        <diffuse>
+                            <color>0.784314 0.784314 0.784314 0</color>
+                        </diffuse>
+                    </blinn>
+                </technique>
+            </profile_COMMON>
+        </effect>
+        <effect id="lambert20SG-fx">
+            <profile_COMMON>
+                <newparam sid="brunches_02_c-surface">
+                    <surface type="2D">
+                        <init_from>brunches_02_c</init_from>
+                        <format>A8R8G8B8</format>
+                    </surface>
+                </newparam>
+                <newparam sid="brunches_02_c-sampler">
+                    <sampler2D>
+                        <source>brunches_02_c-surface</source>
+                        <minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                    </sampler2D>
+                </newparam>
+                <technique sid="common">
+                    <blinn>
+                        <diffuse>
+                            <texture texture="brunches_02_c-sampler" texcoord="TEX0"></texture>
+                        </diffuse>
+                    </blinn>
+                </technique>
+            </profile_COMMON>
+        </effect>
+    </library_effects>
+    <library_geometries>
+        <geometry id="Mesh_Object_lib" name="Mesh_Object">
+            <mesh>
+                <source id="Mesh_Object_positions" name="position">
+                    <float_array id="Mesh_Object_positions_array" count="96">1.75572 1.4891 0.685743 
+0.0785553 1.62053 -1.68628 
+0.125579 -0.69283 1.68628 
+-1.53294 -0.535892 -0.69713 
+1.63719 1.1362 -1.04852 
+-0.524468 2.634 0.192628 
+0.234236 -1.33282 -0.452804 
+-1.91099 0.19352 0.781782 
+0.436304 0.278538 1.63295 
+0.952188 0.392042 -1.13917 
+-0.174099 -2.45878 1.38215 
+0.348484 -2.31352 -1.3871 
+1.89815 -0.0538179 0.660908 
+-0.476933 1.03358 -0.406882 
+0.984451 -2.63401 0.00045688 
+-1.38021 -1.51678 -1.05934 
+0.680823 2.09776 1.05156 
+1.56164 1.04 -1.51006 
+-0.999904 -0.24015 1.41016 
+-0.099939 -1.27066 -1.15579 
+1.64299 0.449908 0.143051 
+-1.17083 0.432433 -0.0708634 
+1.6655 -2.33804 -0.250945 
+-1.14859 -2.32331 -0.459927 
+1.43713 1.1618 0.723395 
+-0.0920037 1.05729 -1.30874 
+0.836439 -1.6214 1.28214 
+-0.686027 -1.6936 -0.756232 
+1.80831 0.891739 -0.0924188 
+-1.09631 0.763644 -0.151017 
+1.91099 -2.008 -0.105703 
+-0.9948 -2.10255 -0.163751 
+</float_array>
+                    <technique_common>
+                        <accessor count="32" offset="0" source="#Mesh_Object_positions_array" stride="3">
+                            <param name="X" type="float"></param>
+                            <param name="Y" type="float"></param>
+                            <param name="Z" type="float"></param>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="rock_plants_003_LOD1_uv_uvmap" name="uvmap">
+                    <float_array id="rock_plants_003_LOD1_uv_uvmap_array" count="96">0 1 
+1 0 
+0 0 
+0 1 
+1 1 
+1 0 
+1 1 
+1 0 
+0 0 
+0 1 
+1 1 
+0 0 
+0 1 
+1 0 
+0 0 
+0 1 
+1 1 
+1 0 
+1 1 
+1 0 
+0 0 
+0 1 
+1 1 
+0 0 
+0 1 
+1 0 
+0 0 
+1 1 
+1 0 
+0 1 
+1 1 
+1 0 
+0 0 
+0 1 
+1 1 
+0 0 
+1 1 
+1 0 
+0 0 
+1 1 
+0 0 
+0 1 
+0 1 
+1 0 
+0 0 
+1 1 
+1 0 
+0 1 
+</float_array>
+                    <technique_common>
+                        <accessor count="48" offset="0" source="#rock_plants_003_LOD1_uv_uvmap_array" stride="2">
+                            <param name="S" type="float"></param>
+                            <param name="T" type="float"></param>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="Mesh_Object_vertices">
+                    <input semantic="POSITION" source="#Mesh_Object_positions"></input>
+                </vertices>
+                <polylist count="0" material="Default">
+                    <input offset="0" semantic="VERTEX" source="#Mesh_Object_vertices"></input>
+                    <vcount></vcount>
+                    <p></p>
+                </polylist>
+                <polylist count="16" material="lambert20SG">
+                    <input offset="0" semantic="VERTEX" source="#Mesh_Object_vertices"></input>
+                    <input offset="1" semantic="TEXCOORD" source="#rock_plants_003_LOD1_uv_uvmap" set="0"></input>
+                    <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+                    <p>0 2 1 1 2 0 1 5 3 4 2 3 4 8 5 7 7 6 4 11 7 10 6 9 8 14 9 13 10 12 9 17 11 16 10 15 12 20 13 19 15 18 12 23 15 22 14 21 16 26 17 25 18 24 18 29 17 28 19 27 20 32 21 31 23 30 20 35 23 34 22 33 24 38 25 37 27 36 26 41 24 40 27 39 28 44 29 43 30 42 30 47 29 46 31 45 </p>
+                </polylist>
+            </mesh>
+        </geometry>
+    </library_geometries>
+    <library_controllers></library_controllers>
+    <library_visual_scenes>
+        <visual_scene id="VisualSceneNode" name="Scene">
+            <node id="Mesh_Object" name="Mesh_Object">
+                <instance_geometry url="#Mesh_Object_lib">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="Default" target="#Default"></instance_material>
+                            <instance_material symbol="lambert20SG" target="#lambert20SG">
+                                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"></bind_vertex_input>
+                            </instance_material>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <instance_visual_scene url="#VisualSceneNode"></instance_visual_scene>
+    </scene>
+</COLLADA>

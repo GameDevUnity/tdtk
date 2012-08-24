@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <asset>
+        <contributor>
+            <authoring_tool>Lightwave 9.5</authoring_tool>
+        </contributor>
+        <created>2010-03-09T10:17:10Z</created>
+        <modified>2010-03-09T10:17:10Z</modified>
+        <unit meter="1"></unit>
+        <up_axis>Y_UP</up_axis>
+    </asset>
+    <library_animations></library_animations>
+    <library_cameras></library_cameras>
+    <library_lights></library_lights>
+    <library_images>
+        <image id="rock_011" name="rock_011">
+            <init_from>file:///D:/3d/3d-daten/3D/3D-Objekte/Martin_Teichmann/rocks/Meshes/rock_011.tga</init_from>
+        </image>
+    </library_images>
+    <library_materials>
+        <material id="lambert19SG_Smoothing" name="lambert19SG_Smoothing">
+            <instance_effect url="#lambert19SG_Smoothing-fx"></instance_effect>
+        </material>
+        <material id="Default" name="Default">
+            <instance_effect url="#Default-fx"></instance_effect>
+        </material>
+    </library_materials>
+    <library_effects>
+        <effect id="lambert19SG_Smoothing-fx">
+            <profile_COMMON>
+                <newparam sid="rock_011-surface">
+                    <surface type="2D">
+                        <init_from>rock_011</init_from>
+                        <format>A8R8G8B8</format>
+                    </surface>
+                </newparam>
+                <newparam sid="rock_011-sampler">
+                    <sampler2D>
+                        <source>rock_011-surface</source>
+                        <minfilter>LINEAR_MIPMAP_LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                    </sampler2D>
+                </newparam>
+                <technique sid="common">
+                    <blinn>
+                        <diffuse>
+                            <texture texture="rock_011-sampler" texcoord="TEX0"></texture>
+                        </diffuse>
+                    </blinn>
+                </technique>
+            </profile_COMMON>
+        </effect>
+        <effect id="Default-fx">
+            <profile_COMMON>
+                <technique sid="common">
+                    <blinn>
+                        <diffuse>
+                            <color>0.784314 0.784314 0.784314 0</color>
+                        </diffuse>
+                    </blinn>
+                </technique>
+            </profile_COMMON>
+        </effect>
+    </library_effects>
+    <library_geometries>
+        <geometry id="Mesh_Object_lib" name="Mesh_Object">
+            <mesh>
+                <source id="Mesh_Object_positions" name="position">
+                    <float_array id="Mesh_Object_positions_array" count="78">-0.700109 0 -0.672196 
+-0.235972 0 0.892211 
+-0.251031 1.12284 -0.709503 
+-0.0185721 1.06827 0.673456 
+0.358085 0.899979 -0.789564 
+0.611622 0.930007 0.800498 
+0.248876 0 -0.726411 
+0.541295 0 0.780901 
+-0.304028 1.18456 0.00252838 
+0.619676 1.01489 -0.141053 
+0.518081 0 -0.115248 
+-0.654687 0 0.170872 
+-0.779286 0.624393 -0.878196 
+0.421565 0.474827 -0.864069 
+0.730618 0.487585 -0.291242 
+0.779286 0.6104 0.902614 
+-0.210666 0.745083 1.03256 
+-0.731355 0.698454 0.0495363 
+-0.45832 0.842091 -0.806466 
+-0.426446 0.899501 -0.0548149 
+-0.179806 0.888069 0.705167 
+0.313511 0.566671 1.09477 
+0.184403 0 0.937185 
+-0.195833 0 -0.842368 
+-0.152398 0.532982 -1.09477 
+-0.0822467 0.904047 -0.919834 
+</float_array>
+                    <technique_common>
+                        <accessor count="26" offset="0" source="#Mesh_Object_positions_array" stride="3">
+                            <param name="X" type="float"></param>
+                            <param name="Y" type="float"></param>
+                            <param name="Z" type="float"></param>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="rock_012_uv_uvmap" name="uvmap">
+                    <float_array id="rock_012_uv_uvmap_array" count="252">0.770785 0.296218 
+0.74301 0.34319 
+0.814792 0.360147 
+0.839567 0.310824 
+0.770785 0.296218 
+0.814792 0.360147 
+0.74526 0.477188 
+0.807964 0.408942 
+0.749777 0.408794 
+0.74526 0.477188 
+0.802951 0.480422 
+0.807964 0.408942 
+0.801557 0.56352 
+0.791611 0.519161 
+0.743481 0.56281 
+0.743481 0.56281 
+0.791611 0.519161 
+0.738441 0.517105 
+0.955299 0.485673 
+0.914917 0.454066 
+0.902774 0.491457 
+0.96025 0.454457 
+0.914917 0.454066 
+0.955299 0.485673 
+0.656232 0.499967 
+0.706578 0.496045 
+0.692226 0.442118 
+0.656232 0.499967 
+0.692226 0.442118 
+0.641603 0.458601 
+0.875895 0.478153 
+0.862645 0.426269 
+0.802951 0.480422 
+0.802951 0.480422 
+0.862645 0.426269 
+0.807964 0.408942 
+0.875459 0.560363 
+0.885495 0.507637 
+0.801557 0.56352 
+0.801557 0.56352 
+0.885495 0.507637 
+0.791611 0.519161 
+0.904596 0.335397 
+0.814792 0.360147 
+0.894908 0.395725 
+0.904596 0.335397 
+0.839567 0.310824 
+0.814792 0.360147 
+0.74526 0.477188 
+0.749777 0.408794 
+0.727071 0.435642 
+0.738441 0.517105 
+0.791611 0.519161 
+0.74526 0.477188 
+0.791611 0.519161 
+0.802951 0.480422 
+0.74526 0.477188 
+0.791611 0.519161 
+0.875895 0.478153 
+0.802951 0.480422 
+0.791611 0.519161 
+0.885495 0.507637 
+0.875895 0.478153 
+0.87755 0.413631 
+0.862645 0.426269 
+0.875895 0.478153 
+0.902774 0.491457 
+0.87755 0.413631 
+0.875895 0.478153 
+0.867303 0.404726 
+0.805638 0.386676 
+0.862645 0.426269 
+0.805638 0.386676 
+0.807964 0.408942 
+0.862645 0.426269 
+0.805638 0.386676 
+0.749777 0.408794 
+0.807964 0.408942 
+0.74437 0.377496 
+0.749777 0.408794 
+0.805638 0.386676 
+0.706578 0.496045 
+0.74526 0.477188 
+0.727071 0.435642 
+0.706578 0.496045 
+0.727071 0.435642 
+0.692226 0.442118 
+0.74301 0.34319 
+0.74437 0.377496 
+0.805638 0.386676 
+0.74301 0.34319 
+0.805638 0.386676 
+0.814792 0.360147 
+0.814792 0.360147 
+0.867303 0.404726 
+0.894908 0.395725 
+0.814792 0.360147 
+0.805638 0.386676 
+0.867303 0.404726 
+0.914917 0.454066 
+0.907488 0.411521 
+0.87755 0.413631 
+0.96025 0.454457 
+0.907488 0.411521 
+0.914917 0.454066 
+0.96025 0.454457 
+0.966507 0.420596 
+0.907488 0.411521 
+0.620998 0.413115 
+0.692226 0.442118 
+0.675721 0.385079 
+0.620998 0.413115 
+0.641603 0.458601 
+0.692226 0.442118 
+0.692226 0.442118 
+0.711424 0.399615 
+0.675721 0.385079 
+0.692226 0.442118 
+0.727071 0.435642 
+0.711424 0.399615 
+0.711424 0.399615 
+0.727071 0.435642 
+0.749777 0.408794 
+0.914917 0.454066 
+0.87755 0.413631 
+0.902774 0.491457 
+</float_array>
+                    <technique_common>
+                        <accessor count="126" offset="0" source="#rock_012_uv_uvmap_array" stride="2">
+                            <param name="S" type="float"></param>
+                            <param name="T" type="float"></param>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="Mesh_Object_vertices">
+                    <input semantic="POSITION" source="#Mesh_Object_positions"></input>
+                </vertices>
+                <polylist count="0" material="Default">
+                    <input offset="0" semantic="VERTEX" source="#Mesh_Object_vertices"></input>
+                    <vcount></vcount>
+                    <p></p>
+                </polylist>
+                <polylist count="42" material="lambert19SG_Smoothing">
+                    <input offset="0" semantic="VERTEX" source="#Mesh_Object_vertices"></input>
+                    <input offset="1" semantic="TEXCOORD" source="#rock_012_uv_uvmap" set="0"></input>
+                    <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+                    <p>17 2 12 1 0 0 17 5 0 4 11 3 2 8 8 7 4 6 8 11 9 10 4 9 6 14 14 13 10 12 13 17 14 16 6 15 15 20 21 19 7 18 7 23 21 22 22 21 24 26 13 25 6 24 23 29 24 28 6 27 9 32 3 31 5 30 8 35 3 34 9 33 10 38 15 37 7 36 14 41 15 40 10 39 16 44 17 43 1 42 17 47 11 46 1 45 25 50 2 49 4 48 4 53 14 52 13 51 4 56 9 55 14 54 9 59 5 58 14 57 5 62 15 61 14 60 5 65 3 64 20 63 5 68 20 67 15 66 3 71 19 70 20 69 3 74 8 73 19 72 8 77 2 76 19 75 19 80 2 79 18 78 25 83 4 82 13 81 24 86 25 85 13 84 19 89 18 88 12 87 17 92 19 91 12 90 16 95 20 94 17 93 20 98 19 97 17 96 20 101 16 100 21 99 21 104 16 103 22 102 16 107 1 106 22 105 12 110 24 109 0 108 24 113 23 112 0 111 12 116 18 115 24 114 18 119 25 118 24 117 2 122 25 121 18 120 15 125 20 124 21 123 </p>
+                </polylist>
+            </mesh>
+        </geometry>
+    </library_geometries>
+    <library_controllers></library_controllers>
+    <library_visual_scenes>
+        <visual_scene id="VisualSceneNode" name="Scene">
+            <node id="Mesh_Object" name="Mesh_Object">
+                <instance_geometry url="#Mesh_Object_lib">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="Default" target="#Default"></instance_material>
+                            <instance_material symbol="lambert19SG_Smoothing" target="#lambert19SG_Smoothing">
+                                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"></bind_vertex_input>
+                            </instance_material>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <instance_visual_scene url="#VisualSceneNode"></instance_visual_scene>
+    </scene>
+</COLLADA>
