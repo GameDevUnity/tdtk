@@ -1,0 +1,5 @@
+<something>
+  <DmgType0 Name="TypeA" Desp="" />
+  <DmgType1 Name="TypeB" Desp="" />
+  <DmgType2 Name="TypeC" Desp="" />
+</something>

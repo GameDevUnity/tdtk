@@ -1,0 +1,5 @@
+<something>
+  <ArmorType0 Name="TypeX" Desp="" mod0="1" mod1="0.5" mod2="0.5" />
+  <ArmorType1 Name="TypeY" Desp="" mod0="0.5" mod1="1" mod2="0.5" />
+  <ArmorType2 Name="TypeZ" Desp="" mod0="0.5" mod1="0.5" mod2="1" />
+</something>

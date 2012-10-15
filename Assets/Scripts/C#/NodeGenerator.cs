@@ -130,6 +130,8 @@ public class NodeGenerator : MonoBehaviour {
 			if(cNode.walkable){
 				//check if there's anything within the point
 				LayerMask mask=1<<LayerManager.LayerPlatform();
+				if(BuildManager.buildManager.terrainColliderLayer>=0)
+					mask|=1<<BuildManager.buildManager.terrainColliderLayer;
 				Collider[] cols=Physics.OverlapSphere(cNode.pos, gridSize*0.45f, ~mask);
 				if(cols.Length>0){
 					cNode.walkable=false;

@@ -67,6 +67,9 @@ public class UnitAttribute{
 		
 		offsetB=overlayBase.localPosition;
 		
+		if(overlayHP) scaleModifierH=UnitUtility.GetWorldScale(overlayHP).x*5;
+		if(overlayShield) scaleModifierS=UnitUtility.GetWorldScale(overlayShield).x*5;
+		
 		if(overlayHP!=null) {
 			overlayHP.gameObject.layer=LayerManager.LayerOverlay();
 			overlayRendererH=overlayHP.renderer;
@@ -147,17 +150,18 @@ public class UnitAttribute{
 	private Vector3 offsetH;
 	private Vector3 offsetB;
 	
+	private float scaleModifierH=1;
+	private float scaleModifierS=1;
+	
 	public IEnumerator Update(){
 				
 		if(!overlayHP && !overlayShield) yield break;
 		
 		Quaternion offset=Quaternion.Euler(-90, 0, 0);
 		
-		float scaleModifierH=1;
-		float scaleModifierS=1;
+		//~ float scaleModifierH=1;
+		//~ float scaleModifierS=1;
 		
-		if(overlayHP) scaleModifierH=UnitUtility.GetWorldScale(overlayHP).x*5;
-		if(overlayShield) scaleModifierS=UnitUtility.GetWorldScale(overlayShield).x*5;
 		
 		while(true){
 			if(overlayIsVisible){
@@ -257,6 +261,9 @@ public class UnitAttribute{
 	
 }
 
+
+
+
 public class Unit : MonoBehaviour {
 
 	public string unitName;
@@ -280,6 +287,9 @@ public class Unit : MonoBehaviour {
 	protected float currentMoveSpd;
 	protected float rotateSpd=10;
 	protected int wpCounter=0;
+	
+	[HideInInspector] public int damageType=0;
+	public int armorType=0;
 	
 	//function and configuration to set if this intance has any been inerited by any child instance
 	//these functions are call in Awake() of the inherited clss
@@ -324,7 +334,17 @@ public class Unit : MonoBehaviour {
 		
 		dead=false;
 		scored=false;
+		stunned=false;
+		slowModifier=1;
+		slowEffect=new List<Slow>();
 	}
+	
+	
+	//~ void OnGUI(){
+		//~ Vector3 screenPos = Camera.main.WorldToScreenPoint(thisT.position);
+		//~ GUI.Label(new Rect(screenPos.x-20, Screen.height-screenPos.y-25, 150, 25), currentMoveSpd.ToString()+"  "+stunned);
+		//~ GUI.Label(new Rect(screenPos.x-20, Screen.height-screenPos.y, 150, 25), HPAttribute.fullHP.ToString("f0")+"  "+HPAttribute.HP.ToString("f0"));
+	//~ }
 	
 	
 	public void SetFullHP(float hp){
@@ -340,7 +360,7 @@ public class Unit : MonoBehaviour {
 	IEnumerator TestOverlay(){
 		yield return new WaitForSeconds(0.75f);
 		while(true){
-			ApplyDamage(0.1f*HPAttribute.fullHP*0.1f);
+			ApplyDamage(0.1f*HPAttribute.fullHP*0.1f, 0);
 			yield return new WaitForSeconds(0.1f);
 		}
 	}
@@ -371,15 +391,19 @@ public class Unit : MonoBehaviour {
 	}
 
 	
-	public void ApplyDamage(float dmg){
+	public void ApplyDamage(float dmg, int dmgType){
 		//HPAttribute.HP-=dmg;
-		HPAttribute.ApplyDamage(dmg);
+		//Debug.Log(armorType+"  "+dmgType+"   "+DamageTable.GetModifier(armorType, dmgType));
+		//~ Debug.Log(DamageTable.GetModifier(armorType, dmgType));
+		HPAttribute.ApplyDamage(dmg*DamageTable.GetModifier(armorType, dmgType));
 		
 		if(subClass==_UnitSubClass.Creep && !dead) unitC.PlayHit();
 		
 		if(HPAttribute.HP<=0 && !dead){
 			HPAttribute.HP=0;
 			dead=true;
+			
+			Debug.Log(subClass);
 			
 			if(subClass==_UnitSubClass.Creep){
 				unitC.Dead();
@@ -469,14 +493,14 @@ public class Unit : MonoBehaviour {
 	
 	
 	
-	public void ApplyDot(Dot dot){
-		StartCoroutine(DotRoutine(dot));
+	public void ApplyDot(Dot dot, int dmgType){
+		StartCoroutine(DotRoutine(dot, dmgType));
 	}
 	
-	private IEnumerator DotRoutine(Dot dot){
+	private IEnumerator DotRoutine(Dot dot, int dmgType){
 		float timeStart=Time.time;
 		while(Time.time-timeStart<dot.duration){
-			ApplyDamage(dot.damage);
+			ApplyDamage(dot.damage, dmgType);
 			yield return new WaitForSeconds(dot.interval);
 		}
 	}
@@ -490,6 +514,9 @@ public class Unit : MonoBehaviour {
 		stopMoving=false;
 		if(unitC!=null) currentMoveSpd=unitC.moveSpeed;
 		else if(unitT!=null) currentMoveSpd=unitC.moveSpeed;
+	}
+	public bool HasStoppedMoving(){
+		return stopMoving;
 	}
 	
 	public float GetSlowModifier(){

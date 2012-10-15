@@ -159,6 +159,8 @@ public class UnitTower : Unit {
 			if(scale<1)	col.radius=0.5f*BuildManager.GetGridSize();
 		}
 		
+		SetSubClassInt(this);
+		
 		//assign base stat
 		InitStat();
 		//Debug.Log("init stat");
@@ -959,8 +961,8 @@ public class UnitTower : Unit {
 	void ApplyEffect(Unit unit, bool effect, int div){
 		if(unit.thisObj.active){
 			if(damage>0){
-				if(div>0) unit.ApplyDamage(damage/div);
-				else unit.ApplyDamage(damage);
+				if(div>0) unit.ApplyDamage(damage/div, damageType);
+				else unit.ApplyDamage(damage, damageType);
 				//if(!continousDamage) unit.ApplyDamage(damage);
 				//else unit.ApplyDamage(damage*0.05f);
 			}
@@ -968,18 +970,18 @@ public class UnitTower : Unit {
 				if(effect){
 					if(stunDuration>0) unit.ApplyStun(stunDuration);
 					if(slow.duration*slow.slowFactor>0) unit.ApplySlow(slow);
-					if(dot.damage*dot.duration*dot.interval>0) unit.ApplyDot(dot);
+					if(dot.damage*dot.duration*dot.interval>0) unit.ApplyDot(dot, damageType);
 				}
 			}
 		}
 	}
 	
 	void ApplyEffect(Unit unit){
-		if(damage>0) unit.ApplyDamage(damage);
+		if(damage>0) unit.ApplyDamage(damage, damageType);
 		if(unit.HPAttribute.HP>0){
 			if(stunDuration>0) unit.ApplyStun(stunDuration);
 			if(slow.duration*slow.slowFactor>0) unit.ApplySlow(slow);
-			if(dot.damage*dot.duration*dot.interval>0) unit.ApplyDot(dot);
+			if(dot.damage*dot.duration*dot.interval>0) unit.ApplyDot(dot, damageType);
 		}
 	}
 	
@@ -1590,11 +1592,13 @@ public class UnitTower : Unit {
 		if(soldSound!=null) AudioManager.PlaySound(soldSound, thisT.position);
 		else AudioManager.PlayTowerSold();
 		
+		//tells gamecontrol to refund the tower
 		int[] sellValue=GetTowerSellValue();
 		//~ GameControl.GetSellTowerRefundRatio();
 		//~ for(int i=0; i<towerValue.Length; i++){
 			//~ sellValue[i]=(int)Mathf.Floor(sellValue[i]*GameControl.GetSellTowerRefundRatio());
 		//~ }
+		
 		GameControl.GainResource(sellValue);
 		
 		//GameControl.ClearSelection();
@@ -1604,6 +1608,7 @@ public class UnitTower : Unit {
 	
 	//call when the tower is sold or destroy
 	public void Destroy(){
+		Debug.Log("Destroy");
 		if(onDestroyE!=null) onDestroyE(this);
 		
 		//tells platform to reactivate node if platform is walkable
@@ -1613,10 +1618,6 @@ public class UnitTower : Unit {
 			occupiedPlatform=null;
 		}
 		//else Debug.Log("no platform attached");
-		
-		//tells gamecontrol to refund the tower
-		
-		
 		
 		//thisObj.SetActiveRecursively(false);
 		Destroy(thisObj);

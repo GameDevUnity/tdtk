@@ -215,7 +215,7 @@ public class UnitCreep : Unit {
 				UnitCreep unit=obj.GetComponent<UnitCreep>();
 				unit.Init(path, SpawnManager.NewUnitID(), waveID);
 				//resume the path currently followed by this unit
-				Debug.Log("resume1");
+				
 				unit.StartCoroutine(unit.ResumeParentPath(wpMode, wp, wpCounter, currentPS, subPath, currentPathID, subWPCounter));
 			}
 		}
@@ -241,10 +241,7 @@ public class UnitCreep : Unit {
 	
 	//this is to resume a half completed path, called when the unit is a UnitCreep spawned by other UnitCreep
 	public IEnumerator ResumeParentPath(bool wpM, List<Vector3> w, int wpC, PathSection cPS, List<Vector3> sP, int pID, int subWPC){
-		Debug.Log("resume2");
 		yield return null;
-		
-		Debug.Log("resume3");
 		
 		wpMode=wpM;
 		wpCounter=wpC;
@@ -330,6 +327,8 @@ public class UnitCreep : Unit {
 	
 	//function call to rotate and move toward a pecific point, return true when the point is reached
 	public override bool MoveToPoint(Vector3 point){
+		//Debug.DrawLine(thisT.position, thisT.position+new Vector3(0, 2, 0), Color.red, 0.1f);
+		
 		//this is for dynamic waypoint, each unit creep have it's own offset pos
 		point+=dynamicOffset;
 		

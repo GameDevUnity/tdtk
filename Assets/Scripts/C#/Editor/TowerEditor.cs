@@ -116,7 +116,7 @@ public class TowerEditor : EditorWindow {
 	private Vector2 scrollPos;
 	
     void OnGUI () {
-		scrollPos = GUI.BeginScrollView(new Rect(0, 0, window.position.width, window.position.height), scrollPos, new Rect(0, 0, Mathf.Max(window.position.width, 610+(levelCap-3)*180), 1220));
+		scrollPos = GUI.BeginScrollView(new Rect(0, 0, window.position.width, window.position.height), scrollPos, new Rect(0, 0, Mathf.Max(window.position.width, 610+(levelCap-3)*180), 1270));
 		
 		GUI.changed = false;
 		
@@ -211,7 +211,11 @@ public class TowerEditor : EditorWindow {
 				}
 				else startY+=20;
 
-				
+				towerList[index].armorType=EditorGUI.IntField(new Rect(startX, startY+=20, 300, height-3), "ArmorType:", towerList[index].armorType);
+				if(towerList[index].type!=_TowerType.SupportTower && towerList[index].type!=_TowerType.ResourceTower && towerList[index].type!=_TowerType.Block){
+					towerList[index].armorType=EditorGUI.IntField(new Rect(startX, startY+=20, 300, height-3), "DamageType:", towerList[index].damageType);
+				}
+				else startY+=20;
 				
 				if(towerList[index].type==_TowerType.TurretTower || towerList[index].type==_TowerType.DirectionalAOETower){
 					towerTargetArea = EditorGUI.Popup(new Rect(startX, startY+=20, 300, 15), "TargetingArea:", towerTargetArea, towerTargetAreaLabel);

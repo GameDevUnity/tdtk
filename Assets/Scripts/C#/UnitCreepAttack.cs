@@ -242,9 +242,15 @@ public class UnitCreepAttack : MonoBehaviour {
 		LayerMask maskTarget=1<<LayerManager.LayerTower();
 		while(true){
 			if(target==null){
+				if(unit.HasStoppedMoving()){
+					unit.ResumeAnimation();
+					unit.ResumeMoving();
+				}
+				
 				if(targetArea==_TargetingA.AllAround){
 					
 						Collider[] cols=Physics.OverlapSphere(unit.thisT.position, range, maskTarget);
+						//if(cols!=null && cols.Length>0) Debug.Log(cols[0]);
 					
 						if(cols.Length>0){
 							Collider currentCollider=cols[Random.Range(0, cols.Length)];
@@ -268,6 +274,8 @@ public class UnitCreepAttack : MonoBehaviour {
 				else if(targetArea==_TargetingA.FrontalCone){
 					
 						Collider[] cols=Physics.OverlapSphere(unit.thisT.position, range, maskTarget);
+						//if(cols!=null && cols.Length>0) Debug.Log(cols[0]);
+					
 						if(cols.Length>0){
 							Collider currentCollider=cols[0];
 							foreach(Collider col in cols){
@@ -314,6 +322,7 @@ public class UnitCreepAttack : MonoBehaviour {
 				}
 			}
 			else{
+				
 				//if target is out of range or dead or inactive, clear target
 				currentTargetDist=Vector3.Distance(unit.thisT.position, target.thisT.position);
 				if(currentTargetDist>range*1.25f || target.HPAttribute.HP<=0 || !target.thisObj.active){
@@ -321,6 +330,7 @@ public class UnitCreepAttack : MonoBehaviour {
 					if(attackMode==_AttackMode.StopNAttack){
 						unit.ResumeAnimation();
 						unit.ResumeMoving();
+						//Debug.Log("target cleared");
 					}
 					if(meleeState==_MeleeState.Attacking){
 						meleeState=_MeleeState.OutOfRange;
@@ -463,14 +473,15 @@ public class UnitCreepAttack : MonoBehaviour {
 	void ApplyEffect(Unit targetUnit, bool effect, int div){
 		if(targetUnit.thisObj.active){
 			if(damage>0){
-				if(div>0) targetUnit.ApplyDamage(damage/div);
-				else targetUnit.ApplyDamage(damage);
+				if(div>0) targetUnit.ApplyDamage(damage/div, damageType);
+				else targetUnit.ApplyDamage(damage, damageType);
 			}
 		}
 	}
 	
+	public int damageType;
 	void ApplyEffect(Unit targetUnit){
-		if(damage>0) targetUnit.ApplyDamage(damage);
+		if(damage>0) targetUnit.ApplyDamage(damage, damageType);
 	}
 	
 	public Unit GetTarget(){

@@ -5,6 +5,7 @@ public enum _GameState{Idle, Started, Ended}
 
 [RequireComponent (typeof (ResourceManager))]
 [RequireComponent (typeof (LayerManager))]
+[RequireComponent (typeof (DamageTable))]
 
 public class GameControl : MonoBehaviour {
 	
@@ -38,6 +39,9 @@ public class GameControl : MonoBehaviour {
 	public float buildingBarWidthModifier=1f;
 	public float buildingBarHeightModifier=1f;
 	public Vector3 buildingBarPosOffset=new Vector3(0, -0.5f, 0);
+	
+
+	public bool autoCreateOverlayCamera=false;
 	
 
 	void Awake(){
@@ -81,32 +85,40 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		AudioManager.PlayNewWaveSound ();
+		
 		totalWaveCount=spawnManager.waves.Length;
 		
-		//Create OverlayCamera
 		Camera mainCam=Camera.main;
-		Transform mainCamT=mainCam.transform;
-		
-		GameObject overlayCamObj=new GameObject();
-		overlayCamObj.name="OverlayCamera";
-		
-		LayerMask layer=1<<LayerManager.LayerOverlay();
 		LayerMask layerUI=1<<LayerManager.LayerMiscUIOverlay();
-		mainCam.cullingMask=mainCam.cullingMask&~layer&~layerUI;
+		mainCam.cullingMask=mainCam.cullingMask&~layerUI;
 		
-		Camera overlayCam=overlayCamObj.AddComponent<Camera>();
-		
-		overlayCam.orthographic=mainCam.orthographic;
-		overlayCam.orthographicSize=mainCam.orthographicSize;
+		//Create OverlayCamera
+		if(autoCreateOverlayCamera){
+			
+			Transform mainCamT=mainCam.transform;
+			
+			GameObject overlayCamObj=new GameObject();
+			overlayCamObj.name="OverlayCamera";
+			
+			LayerMask layer=1<<LayerManager.LayerOverlay();
+			
+			mainCam.cullingMask=mainCam.cullingMask&~layer;
+			
+			Camera overlayCam=overlayCamObj.AddComponent<Camera>();
+			
+			overlayCam.orthographic=mainCam.orthographic;
+			overlayCam.orthographicSize=mainCam.orthographicSize;
 
-		overlayCam.clearFlags=CameraClearFlags.Depth;
-		overlayCam.depth=mainCam.depth + 1;
-		overlayCam.cullingMask=layer;
-		overlayCam.fieldOfView=mainCam.fieldOfView;
-		
-		overlayCamObj.transform.parent=mainCamT;
-		overlayCamObj.transform.rotation=mainCamT.rotation;
-		overlayCamObj.transform.localPosition=Vector3.zero;
+			overlayCam.clearFlags=CameraClearFlags.Depth;
+			overlayCam.depth=mainCam.depth + 1;
+			overlayCam.cullingMask=layer;
+			overlayCam.fieldOfView=mainCam.fieldOfView;
+			
+			overlayCamObj.transform.parent=mainCamT;
+			overlayCamObj.transform.rotation=mainCamT.rotation;
+			overlayCamObj.transform.localPosition=Vector3.zero;
+		}
 		
 		Time.timeScale=1;
 	}

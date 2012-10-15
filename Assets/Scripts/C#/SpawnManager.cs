@@ -104,7 +104,7 @@ public class SpawnManager : MonoBehaviour {
 		if(waves[waveID].spawned && waves[waveID].activeUnitCount==0){
 			waves[waveID].cleared=true;
 			
-			GameControl.GainResource(waves[waveID].resource);
+			//GameControl.GainResource(waves[waveID].resource);
 			GameControl.GainResource(waves[waveID].resourceGain);
 			//for(int i=0; i<waves[waveID].resourceGain.Length; i++){
 			//	GameControl.GainResource(i, waves[waveID].resourceGain[i]);
@@ -293,7 +293,6 @@ public class SpawnManager : MonoBehaviour {
 [System.Serializable]
 public class SubWave{
 	public GameObject unit;
-	public string desp;
 	public int count;
 	public float interval=1;
 	public float delay;
@@ -310,7 +309,7 @@ public class SubWave{
 public class Wave{
 	public SubWave[] subWaves=new SubWave[1];
 	public float waveInterval;
-	public int resource;
+	//public int resource;
 	public int[] resourceGain=new int[1];
 	
 //	[HideInInspector] public List<UnitCreep> activeUnitList=new List<UnitCreep>();

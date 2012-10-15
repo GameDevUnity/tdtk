@@ -16,6 +16,8 @@ public class BuildManager : MonoBehaviour {
 	
 	public bool retainPrefabShaderForSamples=false;
 	
+	public int terrainColliderLayer=-1;
+	
 	static public BuildManager buildManager;
 	
 	static private BuildableInfo currentBuildInfo;
@@ -146,10 +148,15 @@ public class BuildManager : MonoBehaviour {
 		
 		if(!buildManager.enableTileIndicator) return;
 		
-		LayerMask mask=1<<LayerManager.LayerPlatform();
+		//layerMask for platform only
+		LayerMask maskPlatform=1<<LayerManager.LayerPlatform();
+		//layerMask for detect all collider within buildPoint
+		LayerMask maskAll=1<<LayerManager.LayerPlatform();
+		if(buildManager.terrainColliderLayer>=0) maskAll|=1<<buildManager.terrainColliderLayer;
+		
 		Ray ray = Camera.main.ScreenPointToRay(pointer);
 		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, mask)){
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, maskPlatform)){
 			
 			for(int i=0; i<buildManager.buildPlatforms.Length; i++){
 				
@@ -196,7 +203,7 @@ public class BuildManager : MonoBehaviour {
 					indicator2.transform.position=pos;
 					indicator2.transform.rotation=basePlane.rotation;
 					
-					Collider[] cols=Physics.OverlapSphere(pos, _gridSize/2*0.9f, ~mask);
+					Collider[] cols=Physics.OverlapSphere(pos, _gridSize/2*0.9f, ~maskAll);
 					if(cols.Length>0){
 						indicator2.renderer.material.SetColor("_TintColor", Color.red);
 					}
@@ -216,10 +223,15 @@ public class BuildManager : MonoBehaviour {
 		
 		BuildableInfo buildableInfo=new BuildableInfo();
 		
-		LayerMask mask=1<<LayerManager.LayerPlatform();
+		//layerMask for platform only
+		LayerMask maskPlatform=1<<LayerManager.LayerPlatform();
+		//layerMask for detect all collider within buildPoint
+		LayerMask maskAll=1<<LayerManager.LayerPlatform();
+		if(buildManager.terrainColliderLayer>=0) maskAll|=1<<buildManager.terrainColliderLayer;
+		
 		Ray ray = Camera.main.ScreenPointToRay(pointer);
 		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, mask)){
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, maskPlatform)){
 			
 			for(int i=0; i<buildManager.buildPlatforms.Length; i++){
 				
@@ -261,9 +273,9 @@ public class BuildManager : MonoBehaviour {
 					Vector3 pos=p+basePlane.position;
 					
 					//check if the position is blocked, by any other obstabcle other than the baseplane itself
-					Collider[] cols=Physics.OverlapSphere(pos, _gridSize/2*0.9f, ~mask);
+					Collider[] cols=Physics.OverlapSphere(pos, _gridSize/2*0.9f, ~maskAll);
 					if(cols.Length>0){
-						Debug.Log("something's in the way "+cols[0]);
+						//Debug.Log("something's in the way "+cols[0]);
 						return false;
 					}
 					else{

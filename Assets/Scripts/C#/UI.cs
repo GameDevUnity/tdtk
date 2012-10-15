@@ -35,6 +35,7 @@ public class UI : MonoBehaviour {
 	
 	private bool paused=false;
 	
+	
 	private static UI ui;
 	void Awake(){
 		ui=this;
@@ -320,8 +321,11 @@ public class UI : MonoBehaviour {
 	
 	
 	//draw GUI
+	public GUISkin skin;
 	void OnGUI(){
 		GUI.depth=100;
+		
+		GUI.skin=skin;
 		
 		//general infobox
 		//draw top panel

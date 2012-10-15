@@ -210,34 +210,37 @@ public class Platform : MonoBehaviour {
 			//check if the node is in currentPath, if not, then the node is buildable
 			//this is only applicable if pathSmoothing is off
 			if(!PathFinder.IsPathSmoothingOn()){
-				bool InCurrentPath=false;
-				
+				bool inCurrentPath=false;
 				foreach(Vector3 pathPoint in pathObj.currentPath){
 					float dist=Vector3.Distance(pos, pathPoint);
 					if(dist<gridSize/2){
-						InCurrentPath=true;
+						inCurrentPath=true;
 						break;
 					}
 				}
 				
-				if(!InCurrentPath) {
-					return false;
+				if(inCurrentPath) {
+					//the current node is in current path, check to see if there's other alternative path if this one's blocked
+					//while getting another path, cache it so it can be used later without redo the search
+					//use force instant search so the path is return immediately
+					pathObj.altPath=PathFinder.ForceSearch(pathObj.startN, pathObj.endN, nextBuildNode, nodeGraph);
+					if(pathObj.altPath.Count==0) blocked=true;
+				}
+				else{
+					pathObj.altPath=pathObj.currentPath;
 				}
 			}
-			
-			
-			
-			//the current node is in current path, check to see if there's other alternative path if this one's blocked
-			//while getting another path, cache it so it can be used later without redo the search
-			//use force instant search so the path is return immediately
-			pathObj.altPath=PathFinder.ForceSearch(pathObj.startN, pathObj.endN, nextBuildNode, nodeGraph);
-			
-			if(pathObj.altPath.Count==0) blocked=true;
-			
-			if(blocked) break;
+			else{
+				//the current node is in current path, check to see if there's other alternative path if this one's blocked
+				//while getting another path, cache it so it can be used later without redo the search
+				//use force instant search so the path is return immediately
+				pathObj.altPath=PathFinder.ForceSearch(pathObj.startN, pathObj.endN, nextBuildNode, nodeGraph);
+				
+				if(pathObj.altPath.Count==0) blocked=true;
+				
+				if(blocked) break;
+			}
 		}
-		
-		
 		
 		return blocked;
 		

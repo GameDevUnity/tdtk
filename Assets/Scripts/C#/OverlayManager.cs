@@ -110,6 +110,8 @@ public class OverlayManager : MonoBehaviour {
 		float totalDuration=unit.GetCurrentBuildDuration();
 		
 		while(true){
+			if(unit==null) break;
+			
 			Vector3 screenPos=Camera.main.WorldToScreenPoint(unit.thisT.position+offset);
 			screenPos=new Vector3((screenPos.x), screenPos.y, 0); 
 			
@@ -139,6 +141,8 @@ public class OverlayManager : MonoBehaviour {
 		float totalDuration=unit.GetCurrentBuildDuration();
 		
 		while(true){
+			if(unit==null) break;
+			
 			Vector3 screenPos=Camera.main.WorldToScreenPoint(unit.thisT.position+offset);
 			screenPos=new Vector3((screenPos.x), screenPos.y, 0); 
 			

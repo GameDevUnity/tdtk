@@ -135,6 +135,7 @@ public class UnitCreepAttackEditor : Editor {
 			
 			creep.cooldown = EditorGUILayout.FloatField("AttackCooldown:", creep.cooldown);
 			creep.damage = EditorGUILayout.FloatField("Damage:", creep.damage);
+			creep.damageType = EditorGUILayout.IntField("DamageType:", creep.damageType);
 			creep.stun = EditorGUILayout.FloatField("StunDuration:", creep.stun);
 			
 			if(creep.attackMethod==_AttackMethod.Range){

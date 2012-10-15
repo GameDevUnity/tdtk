@@ -297,6 +297,7 @@ public class UInGUI : MonoBehaviour {
 		
 		//while the game is still going, display the time
 		while(SpawnManager.GetCurrentWave()<SpawnManager.GetTotalWave()){
+			if(GameControl.gameState==_GameState.Ended) break;
 			labelTimer.text="Next Wave: "+SpawnManager.GetTimeNextSpawn().ToString("f1")+"s";
 			yield return null;
 		}
@@ -322,6 +323,9 @@ public class UInGUI : MonoBehaviour {
 				labelGeneralMessage.text="GameOver";
 			}
 		}
+	
+		if(menu && !menu.active) menu.SetActiveRecursively(true);
+		if(menuGeneral && !menuGeneral.active) menuGeneral.SetActiveRecursively(true);
 	}
 	
 	//called whenever resource is gain or used
@@ -348,6 +352,8 @@ public class UInGUI : MonoBehaviour {
 	
 	//called when pause button is pressed, toggle between pause and unpause
 	void OnPause(){
+		if(GameControl.gameState==_GameState.Ended) return;
+		
 		//if the game is currently pause, unpause it
 		if(pause){
 			pause=false;
@@ -409,6 +415,10 @@ public class UInGUI : MonoBehaviour {
 		}
 	}
 	
+	void OnRestart(){
+		Application.LoadLevel(Application.loadedLevelName);
+	}
+	
 	//called when menu button on pause menu is pressed
 	void OnMenu(){
 		if(mainMenu!="") Application.LoadLevel(mainMenu);
@@ -445,19 +455,30 @@ public class UInGUI : MonoBehaviour {
 		//diasble the buttonScaleTween component on the button so we can override the scale tweening
 		buttonSpawnScale.enabled=false;
 		
-		StartCoroutine(ScaleDown());
+		StartCoroutine(SpawnButtonScaleDown());
 	}
 	
 	//called when spawnManager indicate that it's ready to be spawn the next wave
 	void OnClearForSpawning(bool flag){
+		_SpawnMode mode=SpawnManager.GetSpawnMode();
+		if(mode!=_SpawnMode.SkippableWaveCleared && mode!=_SpawnMode.SkippableContinuous){
+			return;
+		}
+		
 		//enable the default scalingTween on the spawn button 
 		buttonSpawnScale.enabled=true;
 		//scale the button back to default size
-		if(flag) TweenScale.Begin(buttonSpawn, 0.2f, new Vector3(1, 1, 1));
+		if(flag){
+			TweenScale.Begin(buttonSpawn, 0.2f, new Vector3(1, 1, 1));
+		}
+		//~ else{
+			//~ buttonSpawnScale.enabled=false;
+			//~ StartCoroutine(ScaleDown());
+		//~ }
 	}
 	
 	//scale the spawn button to invisible, wait for 1 frame so the command override the default button scaling animation
-	IEnumerator ScaleDown(){
+	IEnumerator SpawnButtonScaleDown(){
 		yield return null;
 		TweenScale.Begin(buttonSpawn, 0.2f, Vector3.zero);
 	}
@@ -538,7 +559,7 @@ public class UInGUI : MonoBehaviour {
 			}
 		}
 		
-		//if there's a twoer being selected, clear it
+		//if there's a tower being selected, clear it
 		if(currentSelectedTower!=null){
 			currentSelectedTower=null;
 			OnTowerSelect();
@@ -667,7 +688,6 @@ public class UInGUI : MonoBehaviour {
 		if(currentSelectedTower==null){
 			towerSelectedPanel.SetActiveRecursively(false);
 		}
-		
 		else{
 			//make sure all related ui element is active and visible
 			towerSelectedPanel.SetActiveRecursively(true);
@@ -800,10 +820,11 @@ public class UInGUI : MonoBehaviour {
 				
 			towerLabelInfo.text=towerInfo;
 			
+			Debug.Log(currentSelectedTower.targetingDirection);
 			if(enableTargetDirectionSwitch){
 				if(currentSelectedTower.type==_TowerType.TurretTower || currentSelectedTower.type==_TowerType.DirectionalAOETower){
 					if(currentSelectedTower.targetingArea!=_TargetingArea.AllAround){
-						towerTargetingDirectionSlider.sliderValue=currentSelectedTower.targetingDirection;
+						towerTargetingDirectionSlider.sliderValue=currentSelectedTower.targetingDirection/360f;
 					}
 					else towerTargetingDirection.SetActiveRecursively(false);
 				}

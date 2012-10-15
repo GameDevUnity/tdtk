@@ -32,12 +32,14 @@ public class PathTD : MonoBehaviour {
 			Transform wp=waypoints[i];
 			
 			//check if this is a platform, BuildManager would have add the component and have them layered
-			if(wp.gameObject.layer==LayerManager.LayerPlatform()){
-				//Debug.Log("platform");
-				Platform platform=wp.gameObject.GetComponent<Platform>();
-				path.Add(new PathSection(platform));
+			if(waypoints[i]!=null){
+				if(wp.gameObject.layer==LayerManager.LayerPlatform()){
+					//Debug.Log("platform");
+					Platform platform=wp.gameObject.GetComponent<Platform>();
+					path.Add(new PathSection(platform));
+				}
+				else path.Add(new PathSection(wp.position));
 			}
-			else path.Add(new PathSection(wp.position));
 		}
 		
 		//scan through the path, setup the platform pathSection if there's any
@@ -165,7 +167,8 @@ public class PathTD : MonoBehaviour {
 			if(waypoints!=null && waypoints.Length>0){
 				
 				for(int i=1; i<waypoints.Length; i++){
-					Gizmos.DrawLine(waypoints[i-1].position, waypoints[i].position);
+					if(waypoints[i-1]!=null && waypoints[i]!=null)
+						Gizmos.DrawLine(waypoints[i-1].position, waypoints[i].position);
 				}
 			}
 		}

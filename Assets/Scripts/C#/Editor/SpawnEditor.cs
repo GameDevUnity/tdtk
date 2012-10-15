@@ -69,6 +69,8 @@ public class SpawnEditor : EditorWindow {
 	private Vector2 scrollPos;
     
     void OnGUI(){
+		
+		GUI.changed = false;
     	
     	float startX=3;
 		float startY=3;
@@ -91,17 +93,32 @@ public class SpawnEditor : EditorWindow {
 	    	
 	    	spawnManager.defaultPath=(PathTD)EditorGUI.ObjectField(new Rect(startX, startY+=spaceY, 300, 15), "Default Path: ", spawnManager.defaultPath, typeof(PathTD), true);
         	
-        	waveLength=EditorGUI.IntField(new Rect(startX, startY+=spaceY, 300, 15), "Wave Size:", waveLength);
-			if(waveLength!=spawnManager.waves.Length){
-        		UpdateWaveLength();
-        	}
+			EditorGUI.LabelField(new Rect(startX, startY+spaceY, 300, 15), "Wave Size: "+waveLength);
+			if(GUI.Button(new Rect(startX+150, startY+spaceY-1, 40, 15), "-1")){
+				if(waveLength>1){
+					waveLength-=1;
+					UpdateWaveLength();
+				}
+			}
+			if(GUI.Button(new Rect(startX+200, startY+spaceY-1, 40, 15), "+1")){
+				waveLength+=1;
+				UpdateWaveLength();
+			}
+			
+			startY+=spaceY;
+			
+			//obsolete
+        	//~ waveLength=EditorGUI.IntField(new Rect(startX, startY+=spaceY, 300, 15), "Wave Size:", waveLength);
+			//~ if(waveLength!=spawnManager.waves.Length){
+        		//~ UpdateWaveLength();
+        	//~ }
         	
 			if(rscManager!=null) rscCount=rscManager.resources.Length;
 			else rscCount=1;
 
 			int maxSubWave=GetMaximumSubWaveCount();
 			//GUI.BeginGroup(new Rect(startX, startY+=spaceY, 300, 15));
-			scrollPos = GUI.BeginScrollView(new Rect(startX, startY+=spaceY+2, window.position.width-25, window.position.height-startY), scrollPos, new Rect(0, 0, maxSubWave*200, waveLength*295+waveLength*rscCount*20));
+			scrollPos = GUI.BeginScrollView(new Rect(startX, startY+=spaceY+2, window.position.width-25, window.position.height-startY), scrollPos, new Rect(0, 0, maxSubWave*200, waveLength*260+waveLength*rscCount*20));
 			//~ scrollPos=EditorGUILayout.BeginScrollView(scrollPos, true, true, GUILayout.Width (500), GUILayout.Height (600));
 			
 			startY=-12;
@@ -109,7 +126,13 @@ public class SpawnEditor : EditorWindow {
 			
 			
         	for(int i=0; i<spawnManager.waves.Length; i++){
-        		waveFoldList[i] = EditorGUI.Foldout(new Rect(startX, startY+=spaceY, 60, 15), waveFoldList[i], "wave "+(i+1).ToString());
+        		waveFoldList[i] = EditorGUI.Foldout(new Rect(startX, startY+spaceY-1, 60, 15), waveFoldList[i], "wave "+(i+1).ToString());
+        		if(GUI.Button(new Rect(startX+60, startY+=spaceY, 65, 15), "Remove")){
+					RemoveWave(i);
+					//waveLength-=1;
+					UpdateWaveLength();
+					return;
+				}
 				
         		if(waveFoldList[i]){
 					
@@ -118,7 +141,7 @@ public class SpawnEditor : EditorWindow {
 						spawnManager.waves[i].subWaves[0]=new SubWave();
 					}
 					
-					GUI.Box(new Rect(startX, startY+spaceY-1, Mathf.Max(310, spawnManager.waves[i].subWaves.Length*199+3), 247+(rscCount*21)), "");
+					GUI.Box(new Rect(startX, startY+spaceY-1, Mathf.Max(310, spawnManager.waves[i].subWaves.Length*199+3), 210+(rscCount*21)), "");
 	        		
 	        		startX+=3; startY+=3;
 	        		
@@ -133,15 +156,9 @@ public class SpawnEditor : EditorWindow {
 	        		for(int j=0; j<spawnManager.waves[i].subWaves.Length; j++){
 	        			SubWave subWave=spawnManager.waves[i].subWaves[j];
 	        			
-	        			GUI.Box(new Rect(startX, startY+spaceY-1, 188, 190), "");
+	        			GUI.Box(new Rect(startX, startY+spaceY-1, 188, 148), "");
 	        			startX+=4; startY+=4;
 	        			
-						GUI.skin.textField.wordWrap = true;
-						EditorGUI.LabelField(new Rect(startX, startY+spaceY, 200, 15), "SubW Name:");
-	        			subWave.desp=EditorGUI.TextField(new Rect(startX+100, startY+=spaceY, 80, 30), subWave.desp);
-						
-						startY+=15;
-						
 						EditorGUI.LabelField(new Rect(startX, startY+spaceY, 200, 15), "Unit Prefab:");
 	        			subWave.unit=(GameObject)EditorGUI.ObjectField(new Rect(startX+100, startY+=spaceY, 80, 15), subWave.unit, typeof(GameObject), false);
 	        			
@@ -209,6 +226,8 @@ public class SpawnEditor : EditorWindow {
 			//GUI.EndGroup();
 			
     	}
+		
+		if(GUI.changed) EditorUtility.SetDirty(spawnManager);
     }
 	
 	private int rscCount=1;
@@ -266,10 +285,22 @@ public class SpawnEditor : EditorWindow {
 		
 		subWaveLength=new int[waveLength];
 		for(int i=0; i<waveLength; i++){
+			
 			subWaveLength[i]=spawnManager.waves[i].subWaves.Length;
 		}
 		//Debug.Log(subWaveLength.Length);
     }
+	
+	void RemoveWave(int waveID){
+		Wave[] newWave=new Wave[spawnManager.waves.Length-1];
+		for(int i=0; i<waveID; i++){
+			newWave[i]=CopyWaveInfo(spawnManager.waves[i]);
+		}
+		for(int i=waveID; i<newWave.Length; i++){
+			newWave[i]=CopyWaveInfo(spawnManager.waves[i+1]);
+		}
+		spawnManager.waves=newWave;
+	}
     
     Wave CopyWaveInfo(Wave srcWave){
     	Wave tempWave=new Wave();
@@ -280,7 +311,8 @@ public class SpawnEditor : EditorWindow {
     	}
     	
     	tempWave.waveInterval=srcWave.waveInterval;
-    	tempWave.resource=srcWave.resource;
+    	//tempWave.resource=srcWave.resource;
+    	tempWave.resourceGain=srcWave.resourceGain;
     	
     	return tempWave;
     }
@@ -293,6 +325,8 @@ public class SpawnEditor : EditorWindow {
     	tempSubWave.interval=srcSubWave.interval;
     	tempSubWave.delay=srcSubWave.delay;
     	tempSubWave.path=srcSubWave.path;
+		tempSubWave.overrideHP=srcSubWave.overrideHP;
+		tempSubWave.overrideMoveSpd=srcSubWave.overrideMoveSpd;
     	
     	return tempSubWave;
     }
@@ -356,5 +390,28 @@ public class SpawnEditor : EditorWindow {
 		return duration;
 	}
     
+	//pass the wave list varaible of the SpawnManager
+	float GetAllWaveDuration(Wave[] waves){
+		float duration=0;
+		
+		//all the wave before the last one
+		for(int i=0; i<waves.Length-1; i++){
+			duration+=waves[i].waveInterval;
+		}
+		
+		//the last wave
+		float durationForLastWave=0;
+		foreach(SubWave subWave in waves[waves.Length-1].subWaves){
+			float tempDuration=subWave.count*subWave.interval+subWave.delay;
+			if(tempDuration>duration){
+				durationForLastWave=tempDuration;
+			}
+		}
+		
+		duration+=durationForLastWave;
+		
+		Debug.Log("all wave will be spawned in "+duration+"s");
+		return duration;
+	}
 }
 
